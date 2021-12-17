@@ -100,6 +100,9 @@ class Game:
         return card
     
     def get_score(self):
+        """
+        Não funciona
+        """
         points1 = 0
         points2 = 0
 
@@ -145,21 +148,48 @@ def main():
 
     # Ciclo de Jogo o jogo acaba quando o Jogador e a AI têm ambos 13 cartas
     while len(player1.hand) < 13 and len(player2.hand) < 13:
+        
         print(6*"#" + " Player " + 6*"#") # Vez do jogador 1 jogar
-        card = jogo.draw_card("player1")
+        card1 = np.array([])
+        
+        for _ in range(3):
+            card = jogo.draw_card("player1")
+            card1 = np.append(card1, card)
+       
         print(player1.field)
-        pos = input(f"Jogador 1 saiu lhe {card} onde quer por a carta?\n>>> ")
-        player1.add_2_table(pos)
+        card_off = input(f"Jogador 1 saiu lhe as seguintes {card1} qual quer descartar?\n>>> ")
+        
+        while card_off not in card1:
+            card_off = input(f"Carta inválida!! {card1} qual quer descartar?\n>>> ")
+        player1.add_lixo(card_off)
+        card1 = np.delete(card1, np.argwhere(card1 == card_off))
+        
+        for card in card1: 
+            pos = input(f"Jogador 1 saiu lhe {card} onde quer por a carta?\n>>> ")
+            player1.add_2_table(pos)
         
         print(2*"\n")
         
         print(6*"#" + " Ai " + 6*"#")
-        card = jogo.draw_card("player2")
+        card2 = np.array([])
+       
+        for _ in range(3):
+            card = jogo.draw_card("player2")
+            card2 = np.append(card2, card)
+       
         print(player2.field)
-        pos = input(f"Jogador 2 saiu lhe {card} onde quer por a carta?\n>>> ")
-        player2.add_2_table(pos)
+        card_off = input(f"Jogador 2 saiu lhe as seguintes {card2} qual quer descartar?\n>>> ")
+        
+        while card_off not in card2:
+            card_off = input(f"Carta inválida!! {card2} qual quer descartar?\n>>> ")
+        player2.add_lixo(card_off)
+        card2 = np.delete(card2, np.argwhere(card2 == card_off))
+        for card in card2: 
+            pos = input(f"Jogador 2 saiu lhe {card} onde quer por a carta?\n>>> ")
+            player2.add_2_table(pos)
         
         print(2*"\n")
+
     """
     print("O jogo acabou, e estes são as maos dos 2 jogadores")
     player1.top = np.array(["KS", "KC", "QS"])

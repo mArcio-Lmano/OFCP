@@ -3,7 +3,7 @@ import numpy as np
 class Player:
     def __init__(self, name):
         self.hand = np.array([]) # Todas as cartas que o jogador possui
-
+        self.lixo = np.array([]) # Cartas descartadas pelo jogador
         self.top = np.array([]) # 3 cartas
         self.mid = np.array([]) # 5 cartas
         self.bot = np.array([]) # 5 cartas
@@ -58,5 +58,12 @@ class Player:
 
         return r
 
-    def add_2_table_AI(self):
+    def add_lixo(self, card):
         
+        self.hand = np.delete(self.hand, np.argwhere(self.hand == card))
+        self.lixo = np.append(self.lixo, card) 
+        
+        return "Carta Descartado"
+
+    def add_2_table_AI(self):
+        pass
