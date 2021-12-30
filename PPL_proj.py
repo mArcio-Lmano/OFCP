@@ -1,5 +1,6 @@
 import numpy as np
 from player import *
+from hand_strength import *
 
 def convert_to_string(lista):
     """
@@ -111,7 +112,7 @@ class Game:
         top1_notrep = list(set(top1_num)) #remover repetidos
         top1_group = [[x for x in top1_num if x == y] for y in top1_notrep] # group por cartas iguais
         top1_str = [convert_to_string(x) for x in top1_group]
-        point1
+        points1 #nao sei o que era suposto ser aqui porque dava erro
 
         top2 = self.player2.top
         top2_num = [x[0] for x in top2]
@@ -123,7 +124,8 @@ def main():
     jogo = Game() # Criação do Jogo
     player1 = jogo.player1 # Player
     player2 = jogo.player2 # Ai
-    print(jogo.baralho)
+    #print(jogo.baralho)
+
     
     # Tirar as primeiras 5 cartas para o Jogador e para a AI 
     for _ in range(5):
@@ -198,8 +200,16 @@ def main():
     print("\nAI")
     print(player2.field)
     """
-    print("Vamos calcular os pontos")
-
+    print("Vamos calcular os pontos") #nao sei se faz sentido comparar assim
+    #verficar se ha fouls
+    print("Na posicao top: o player1 obteve",hand_strength(player1.top),"o player2 obteve:",hand_strength(player2.top))
+    print("venceu o jogador",vencedor_linha(player1.top,player2.top))
+    print("Na posição mid o player1 obteve",hand_strength(player1.mid),"o player2 obteve:",hand_strength(player2.mid))
+    print("venceu o jogador",vencedor_linha(player1.mid,player2.mid))
+    print("Na posição bot o player1 obteve",hand_strength(player1.bot),"o player2 obteve:",hand_strength(player2.bot))
+    print("venceu o jogador",vencedor_linha(player1.bot,player2.bot))
+    
+    print("score", get_score(player1,player2))
     #print(jogo.get_score())
 
 
