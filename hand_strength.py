@@ -5,6 +5,7 @@ import numpy as np
 from collections import Counter
 from collections import OrderedDict
 
+
 def create_deck():
         h_cards = np.array(["T", "Q", "J", "K", "A"]) #T é o 10
         l_cards = np.linspace(2, 9, 8, dtype = int)
@@ -19,6 +20,7 @@ baralho=create_deck()
 mao=list(np.random.choice(baralho,5))
 
 #maos de teste ####################################################################################################################
+mao_rly_flush=['AH','KH','JH','QH','TH']
 mao_str_flush=['KC', 'QC', 'JC', 'TC', '9C']     #sequencia do mesmo naipe
 mao_4akind=['KC', 'KS', '4H', 'KC', 'KD']        #4=
 mao_full_house=['KC', '4S', 'KH', '4C', 'KD']    #1 trio 1 par 
@@ -30,6 +32,7 @@ mao_1_par=['KC', '4S', 'AH', '3C', 'KD']         #1 par
 
 
 #unsorted hands
+mao_np_rly_flush=['KH','AH','TH','QH','JH']      #Maior sequência de 5 cartas do mesmo naipe (A K J Q 10)
 mao_no_str_flush=['TC', '9C','KC', 'QC', 'JC']   #sequencia do mesmo naipe
 mao_no_4akind=['KC', 'KD','KC', 'KS', '4H']      #4=
 mao_no_full_house=['KH', '4C', 'KD','KC', '4S',] #1 trio 1 par 
@@ -124,17 +127,25 @@ def qual_mao_naipe_nig(mao): #sabendo que temos pelo menos 2 naipes diferentes
                         return 3
 
 def qual_mao_naipe_ig(mao): #rever para ter a certeza que esta bem
-        if is_naipe_smp_igual(mao) and is_sequencia(mao):     
+        if is_naipe_smp_igual(mao) and is_sequencia(mao):
+                a1 = aux_mao_values(mao)
+                a2 = aux_mao_values(mao_rly_flush)
+                if sum(a1) ==  sum(a2):
+                        #print("royal flush")
+                        return 9  
                 #print("straight flush") 
                 return 8
         else:                                    #por omissao nao é preciso mas seria if not is_sequencia(mao) and is_naipe_smp_igual(mao) 
             #print("flush")
             return 5
 
+def aux_peso_mao(mao):
+        return sum(aux_mao_values(mao))/100
+
 def hand_strength(mao):  
         #print("mao",mao)
-        if is_naipe_smp_igual(mao): return(qual_mao_naipe_ig(mao))
-        else :                   return(qual_mao_naipe_nig(mao))
+        if is_naipe_smp_igual(mao): return((qual_mao_naipe_ig(mao))+aux_peso_mao(mao))
+        else :                   return((qual_mao_naipe_nig(mao))+aux_peso_mao(mao))
         
         
 #'''   testado e a funcionar
@@ -146,9 +157,9 @@ print(hand_strength(mao_str))
 print(hand_strength(mao_flush))
 print(hand_strength(mao_full_house))
 print(hand_strength(mao_4akind))
-print(hand_strength(mao_str_flush))  
+print(hand_strength(mao_str_flush)) 
+print(hand_strength(mao_rly_flush))  
 '''    
-
 def desempate(mao1,mao2):
         values1=aux_mao_values_inv(mao1)
         values2=aux_mao_values_inv(mao2)
@@ -202,11 +213,11 @@ def is_foul(j1):
         
 #get_score(mao_1_par,mao_2_pares,mao_full_house,mao_3akind,mao_flush)
 
-mao_trio =['9H', '4S', 'AC']
-mao_trio2 =['4C', 'AH', 'TS']
+mao_trio =['4H', '4S', 'AC']
+mao_trio2 =['AC', 'AH', 'TS']
+
 #print(hand_strength (mao_trio))
-#print(vencedor(mao_trio,mao_trio2))
-#print(vencedor_linha(mao_trio,mao_trio))
+#print(hand_strength (mao_trio2))
 
 
 def vencedor_total(j1,j2):
@@ -234,7 +245,9 @@ def get_score(j1,j2):
         if is_foul(j1)!= 1 and is_foul(j2)==1: return 2
         else: return 0    #ambos cometeram foul
         
-
+#print(hand_strength(mao_rly_flush))
                 
 
+#print(aux_peso_mao(mao_1_par))
+        
 ################################################falta##############################################################        
