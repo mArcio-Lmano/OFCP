@@ -1,6 +1,6 @@
 import numpy as np
 from player import *
-from hand_strength import get_score, hand_strength
+from hand_strength import get_score, hand_strength, vencedor_linha
 from decidir import place_cards
 
 
@@ -168,12 +168,30 @@ class Game:
             print(6*"#" + f"{player.name}" + 6*"#")
             print(player.field)
 
+
+
+        #print("Na posicao top: o player1 obteve",hand_strength(player1.top),"o player2 obteve:",hand_strength(player2.top))
+        #print("venceu o jogador",vencedor_linha(player1.top,player2.top))
+        #print("Na posição mid o player1 obteve",hand_strength(player1.mid),"o player2 obteve:",hand_strength(player2.mid))
+        #print("venceu o jogador",vencedor_linha(player1.mid,player2.mid))
+        #print("Na posição bot o player1 obteve",hand_strength(player1.bot),"o player2 obteve:",hand_strength(player2.bot))
+        #print("venceu o jogador",vencedor_linha(player1.bot,player2.bot))
+
         players_wins = self.players_list + self.AIs_list
         winner = players_wins[0]
         max_poinst = -1
         no_winners_flag = False
-    
+
         for i in range(1, len(players_wins)):
+
+            print("Na posicao top: o", winner.name,"obteve",hand_strength(winner.top),"o ", players_wins[i].name,"obteve:",hand_strength(players_wins[i].top))
+            print("venceu o jogador",vencedor_linha(winner.top,players_wins[i].top))
+            print("Na posição mid o ", winner.name," obteve",hand_strength(winner.mid),"o ", players_wins[i].name," obteve:",hand_strength(players_wins[i].mid))
+            print("venceu o jogador",vencedor_linha(winner.mid,players_wins[i].mid))
+            print("Na posição bot o ", winner.name," obteve",hand_strength(winner.bot),"o ", players_wins[i].name," obteve:",hand_strength(players_wins[i].bot))
+            print("venceu o jogador",vencedor_linha(winner.bot,players_wins[i].bot))
+
+
             win = get_score(winner, players_wins[i])
             if win == 0:
                 no_winners_flag = True
@@ -182,13 +200,14 @@ class Game:
             else:
                 no_winners_flag = False
                 winner = players_wins[i]
+
         if no_winners_flag:
             print("No winners in this rounda")
         else:
             print(f"Congratz {winner.name}")
 
 def main():
-    jogo = Game(1,2)
+    jogo = Game(0,3)
     jogo.game_loop()
 
 if __name__ == "__main__":
