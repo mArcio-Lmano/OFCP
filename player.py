@@ -65,5 +65,5 @@ class Player:
         
         return "Carta Descartado"
 
-    def add_2_table_AI(self):
-        pass
+#    def add_2_table_AI(self):
+#        pass
