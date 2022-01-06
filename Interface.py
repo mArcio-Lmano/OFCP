@@ -5,6 +5,26 @@ from PPL_proj import *
 import decidir
 import hand_strength
 
+
+#Menu Dificuldade
+def dificuldade(nj,nai):
+    sg.theme('Topanga')
+    titulo = sg.Text('Dificuldade', font='Arial 22', text_color='Orange')
+    nivel = sg.Text('Introduza uma dificuldade entre 5 e 50',font = 'Helvetica 16')
+
+    layout_menu_dif = [[titulo],[nivel,sg.InputText()],[sg.Button('Confirmar',font = 'Helvetica 12'), sg.Button('Sair',font = 'Helvetica 12')]]
+    menu_dif = sg.Window("Dificuldade", layout=layout_menu_dif, size = (500,300))
+    while True:
+        event, values = menu_dif.read()
+        if event == sg.WIN_CLOSED or event == 'Sair':
+            break
+        else:
+            jogo = Game(nj,nai,int(values[0]))
+            jogo.game_loop()
+            menu_dif.close()
+            
+
+
 #Menu Multijogador
 def multijogador():
     sg.theme('Topanga')
@@ -47,29 +67,31 @@ def vsAI():
             break
         elif values[1] and values[4]:
             print('escolha um máximo de 3 participantes (AI + Players)')
+
         elif values[2] and values[0]:
             print('escolha um máximo de 3 participantes (AI + Players)')
+
         elif values[2] and values[1]:
             print('escolha um máximo de 3 participantes (AI + Players)')
+
         elif values[0] and values[3]:
             print('1 AI e 1 jogador')
-            jogo = Game(1,1)
-            jogo.game_loop()
+            dificuldade(1,1)
             menu_vsai.close()
+
         elif values[0] and values[4]:
             print('1 AI e 2 jogadores')
-            jogo = Game(2,1)
-            jogo.game_loop()
+            dificuldade(2,1)
             menu_vsai.close()
+
         elif values[1] and values[3]:
             print('2 AI e 1 jogador')
-            jogo = Game(1,2)
-            jogo.game_loop()
+            dificuldade(1,2)
             menu_vsai.close()
+
         elif values[2]:
             print('3 AI')
-            jogo = Game(0,3)
-            jogo.game_loop()
+            dificuldade(0,3)
             menu_vsai.close()
 
 #Criação de menu principal
