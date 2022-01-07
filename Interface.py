@@ -1,9 +1,6 @@
 from os import close
 import PySimpleGUI as sg
-import player
-from PPL_proj import *
-import decidir
-import hand_strength
+from PPL_proj import Game
 
 
 #Menu Dificuldade
@@ -97,7 +94,7 @@ def vsAI():
 #Criação de menu principal
 def menu_principal():
     sg.theme('Topanga')
-    titulo = sg.Text('Open Face Chinese Poker', font = 'Arial 22',text_color='Orange')
+    titulo = sg.Text('Pineapple Open Face Chinese Poker', font = 'Arial 22',text_color='Orange')
     opcoes_de_jogo = sg.Text('Deseja jogar Multijogador local ou Desafiar o AI?',font = 'Helvetica 16')
 
     layout_menu_principal = [[titulo],[opcoes_de_jogo], [sg.Radio("Multijogador Local:","Option",default = False,font = 'Helvetica 16')], [sg.Radio("Desafiar AI:", "Option",default = False,font = 'Helvetica 16')], [sg.Button('Confirmar',font = 'Helvetica 12',bind_return_key=True), sg.Button('Sair',font = 'Helvetica 12')]]
