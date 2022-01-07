@@ -206,8 +206,9 @@ def is_foul(j1):
                 #print("Foul")
                 return 0
         else:
-                return 1
-        
+                if hand_strength(j1.top)==hand_strength(j1.mid) and desempate(j1.top,j1.mid)==1: return 0
+                if hand_strength(j1.mid)==hand_strength(j1.bot) and desempate(j1.mid,j1.bot)==1: return 0
+                return 1       
 #is_foul(mao_2_pares,mao_1_par,mao_str)
 
         
