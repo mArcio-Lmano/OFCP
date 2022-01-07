@@ -12,7 +12,7 @@ def dificuldade(nj,nai):
     titulo = sg.Text('Dificuldade', font='Arial 22', text_color='Orange')
     nivel = sg.Text('Introduza uma dificuldade entre 5 e 50',font = 'Helvetica 16')
 
-    layout_menu_dif = [[titulo],[nivel,sg.InputText()],[sg.Button('Confirmar',font = 'Helvetica 12'), sg.Button('Sair',font = 'Helvetica 12')]]
+    layout_menu_dif = [[titulo],[nivel,sg.InputText()],[sg.Button('Confirmar',font = 'Helvetica 12',bind_return_key=True), sg.Button('Sair',font = 'Helvetica 12')]]
     menu_dif = sg.Window("Dificuldade", layout=layout_menu_dif, size = (500,300))
     while True:
         event, values = menu_dif.read()
@@ -31,7 +31,7 @@ def multijogador():
     titulo = sg.Text('Multijogador', font = 'Arial 22', text_color='Orange')
     numero_player = sg.Text('Quantos jogadores pretendem entrar?',font = 'Helvetica 16')
 
-    layout_menu_multij = [[titulo],[numero_player],[sg.Radio("2 jogadores","Option",default = False, font = 'Helvetica 16')], [sg.Radio("3 jogadores","Option",default = False, font = 'Helvetica 16')],[sg.Button('Confirmar',font = 'Helvetica 12'), sg.Button('Sair',font = 'Helvetica 12')]]
+    layout_menu_multij = [[titulo],[numero_player],[sg.Radio("2 jogadores","Option",default = False, font = 'Helvetica 16')], [sg.Radio("3 jogadores","Option",default = False, font = 'Helvetica 16')],[sg.Button('Confirmar',font = 'Helvetica 12',bind_return_key=True), sg.Button('Sair',font = 'Helvetica 12')]]
     menu_multij = sg.Window("Multijogador", layout=layout_menu_multij, size = (500,300))
 
     while True:
@@ -58,7 +58,7 @@ def vsAI():
     numero_ai = sg.Text('Quantos AI em jogo pretende?',font = 'Helvetica 16')
     numero_player = sg.Text('Quantos jogadores pretendem jogar?',font = 'Helvetica 16')
 
-    layout_menu_vsai = [[titulo],[numero_ai],[sg.Radio("1 AI","Option",default = False, font = 'Helvetica 16')], [sg.Radio("2 AI","Option",default = False, font = 'Helvetica 16')], [sg.Radio("3 AI", "Option1",default = False, font = 'Helvetica 16')], [numero_player],[sg.Radio("1 Player","Option1",default = False, font = 'Helvetica 16')],[sg.Radio("2 Players","Option1",default = False, font = 'Helvetica 16')],[sg.Button('Confirmar',font = 'Helvetica 12'), sg.Button('Sair',font = 'Helvetica 12')]]
+    layout_menu_vsai = [[titulo],[numero_ai],[sg.Radio("1 AI","Option",default = False, font = 'Helvetica 16')], [sg.Radio("2 AI","Option",default = False, font = 'Helvetica 16')], [sg.Radio("3 AI", "Option1",default = False, font = 'Helvetica 16')], [numero_player],[sg.Radio("1 Player","Option1",default = False, font = 'Helvetica 16')],[sg.Radio("2 Players","Option1",default = False, font = 'Helvetica 16')],[sg.Button('Confirmar',font = 'Helvetica 12',bind_return_key=True), sg.Button('Sair',font = 'Helvetica 12')]]
     menu_vsai = sg.Window("Desafiar AI", layout=layout_menu_vsai, size = (500,300))
 
     while True:
@@ -100,7 +100,7 @@ def menu_principal():
     titulo = sg.Text('Open Face Chinese Poker', font = 'Arial 22',text_color='Orange')
     opcoes_de_jogo = sg.Text('Deseja jogar Multijogador local ou Desafiar o AI?',font = 'Helvetica 16')
 
-    layout_menu_principal = [[titulo],[opcoes_de_jogo], [sg.Radio("Multijogador Local:","Option",default = False,font = 'Helvetica 16')], [sg.Radio("Desafiar AI:", "Option",default = False,font = 'Helvetica 16')], [sg.Button('Confirmar',font = 'Helvetica 12'), sg.Button('Sair',font = 'Helvetica 12')]]
+    layout_menu_principal = [[titulo],[opcoes_de_jogo], [sg.Radio("Multijogador Local:","Option",default = False,font = 'Helvetica 16')], [sg.Radio("Desafiar AI:", "Option",default = False,font = 'Helvetica 16')], [sg.Button('Confirmar',font = 'Helvetica 12',bind_return_key=True), sg.Button('Sair',font = 'Helvetica 12')]]
     menu_principal = sg.Window("Open Face Chinese Poker", layout_menu_principal, size = (500,300))
 
 
