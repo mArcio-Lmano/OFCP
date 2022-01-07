@@ -1,13 +1,11 @@
 import numpy as np
 from player import *
 from hand_strength import get_score, hand_strength, vencedor_linha
-from decidir import place_cards
-
-
-
+from bot import place_cards
+from royalties import pontos2,pontos3
 
 class Game:
-    def __init__(self, n_players, n_AIs, num_jogadores = 1):
+    def __init__(self, n_players, n_AIs, thread_scale,num_jogadores = 1):
         """
         Class associada ao jogo de Poker, onde temos um baralho de 52 cartas,
         \'2,3,4,5,6,7,8,9,10,J,Q,K,A\' com 4 nipes cada uma das cartas
@@ -16,7 +14,7 @@ class Game:
         \'C\' - Clubs
         \'D\' - Diamons
         """
-        
+        self.thread_scale = thread_scale
         while n_players + n_AIs > 3:
             print("Maximo 3 jogadores")
             n_players = input("Number of human players\n>>>")
@@ -34,6 +32,7 @@ class Game:
             self.AIs_list += [Player(f"AI {i+1}")]
 
         self.baralho = self.create_deck()
+        self.run_game_until()
 
     def create_deck(self):
         h_cards = np.array(["T", "Q", "J", "K", "A"])
@@ -89,7 +88,7 @@ class Game:
             print(6*"#" + f" {bot.name} " + 6*"#")
             print(f"Saiu lhe a seguinte mão {bot.hand}")
             
-            place_AI = place_cards(self, bot, bot.hand)[0]
+            place_AI = place_cards(self, bot, bot.hand, self.thread_scale)[0]
             print(place_AI)
             for i in range(5):
                 if place_AI[i] == 0:
@@ -108,7 +107,7 @@ class Game:
 
             # Player 3cards game cicle
             for player in self.players_list:
-                print(6*"#" + " {player.name} " + 6*"#") # Vez do jogador 1 jogar
+                print(6*"#" + f" {player.name} " + 6*"#") # Vez do jogador 1 jogar
                 cards = np.array([])
                 
                 for _ in range(3):
@@ -140,7 +139,7 @@ class Game:
                     card = self.draw_card(bot)
                     cards = np.append(cards, card)
                 
-                AI_move = place_cards(self, bot, cards)
+                AI_move = place_cards(self, bot, cards, self.thread_scale)
                 place_AI = AI_move[0]
                 card_off = AI_move[1]
                 
@@ -165,138 +164,38 @@ class Game:
         
         print("Vamos calcular os pontos")
         for player in self.players_list + self.AIs_list:
-            print(6*"#" + f"{player.name}" + 6*"#")
+            print(6*"#" + f" {player.name} " + 6*"#")
             print(player.field)
-
-
-
-        #print("Na posicao top: o player1 obteve",hand_strength(player1.top),"o player2 obteve:",hand_strength(player2.top))
-        #print("venceu o jogador",vencedor_linha(player1.top,player2.top))
-        #print("Na posição mid o player1 obteve",hand_strength(player1.mid),"o player2 obteve:",hand_strength(player2.mid))
-        #print("venceu o jogador",vencedor_linha(player1.mid,player2.mid))
-        #print("Na posição bot o player1 obteve",hand_strength(player1.bot),"o player2 obteve:",hand_strength(player2.bot))
-        #print("venceu o jogador",vencedor_linha(player1.bot,player2.bot))
 
         players_wins = self.players_list + self.AIs_list
         winner = players_wins[0]
         max_poinst = -1
         no_winners_flag = False
+        if len(players_wins)==2:
+            pontos = pontos2(players_wins[0],players_wins[1])
+        elif len(players_wins)==3:         
+            pontos = pontos3(players_wins[0],players_wins[1],players_wins[2])
+            
+        for point, player in zip(pontos, players_wins):
+            player.update_points(point)
+            print(f"{player.name}: {player.points}")
 
-        for i in range(1, len(players_wins)):
+    def run_game_until(self, points_th = 5):
+        max_point = 0
+        
+        while max_point < points_th:
+            self.game_loop()
+            max_point = 0
+            players_list = self.players_list + self.AIs_list
+            for i in range(len(self.players_list) + len(self.AIs_list)):
+                max_point = max(max_point, players_list[i].points)
+            self.baralho = self.create_deck()
+            players = self.players_list + self.AIs_list
 
-            print("Na posicao top: o", winner.name,"obteve",hand_strength(winner.top),"o ", players_wins[i].name,"obteve:",hand_strength(players_wins[i].top))
-            print("venceu o jogador",vencedor_linha(winner.top,players_wins[i].top))
-            print("Na posição mid o ", winner.name," obteve",hand_strength(winner.mid),"o ", players_wins[i].name," obteve:",hand_strength(players_wins[i].mid))
-            print("venceu o jogador",vencedor_linha(winner.mid,players_wins[i].mid))
-            print("Na posição bot o ", winner.name," obteve",hand_strength(winner.bot),"o ", players_wins[i].name," obteve:",hand_strength(players_wins[i].bot))
-            print("venceu o jogador",vencedor_linha(winner.bot,players_wins[i].bot))
-
-
-            win = get_score(winner, players_wins[i])
-            if win == 0:
-                no_winners_flag = True
-            elif win == 1:
-                no_winners_flag = False
-            else:
-                no_winners_flag = False
-                winner = players_wins[i]
-
-        if no_winners_flag:
-            print("No winners in this rounda")
-        else:
-            print(f"Congratz {winner.name}")
-
+            for player in players:
+                player.reset()
 def main():
-    jogo = Game(0,3)
-    jogo.game_loop()
+    jogo = Game(0,3,0)
 
 if __name__ == "__main__":
     main()
-#def main():
-#    jogo = Game() # Criação do Jogo
-#    player1 = jogo.player1 # Player
-#    player2 = jogo.player2 # Ai
-#    print(jogo.baralho)
-#    
-#    # Tirar as primeiras 5 cartas para o Jogador e para a AI 
-#    for _ in range(5):
-#        card1 = jogo.draw_card("player1")
-#        card2 = jogo.draw_card("player2")
-#    
-#    # Primeira Mão Player
-#    print(6*"#" + " Player " + 6*"#")
-#    print(f"Saiu lhe a seguinte mão {player1.hand}")
-#    for i in range(5):
-#        pos = input(f"Onde quer colocar {player1.hand[i]}?\n>>> ")
-#        player1.add_2_table(pos)
-#
-#    print(2*"\n")
-#
-#    # Primeira Mão AI
-#    print(6*"#" + " AI " + 6*"#")
-#    print(f"Saiu lhe a seguinte mão {player2.hand}")
-#    for i in range(5):
-#        pos = input(f"Onde quer colocar {player2.hand[i]}?\n>>> ")
-#        player2.add_2_table(pos)
-#
-#    # Ciclo de Jogo o jogo acaba quando o Jogador e a AI têm ambos 13 cartas
-#    while len(player1.hand) < 13 and len(player2.hand) < 13:
-#        
-#        print(6*"#" + " Player " + 6*"#") # Vez do jogador 1 jogar
-#        card1 = np.array([])
-#        
-#        for _ in range(3):
-#            card = jogo.draw_card("player1")
-#            card1 = np.append(card1, card)
-#       
-#        print(player1.field)
-#        card_off = input(f"Jogador 1 saiu lhe as seguintes {card1} qual quer descartar?\n>>> ")
-#        
-#        while card_off not in card1:
-#            card_off = input(f"Carta inválida!! {card1} qual quer descartar?\n>>> ")
-#        player1.add_lixo(card_off)
-#        card1 = np.delete(card1, np.argwhere(card1 == card_off))
-#        
-#        for card in card1: 
-#            pos = input(f"Jogador 1 saiu lhe {card} onde quer por a carta?\n>>> ")
-#            player1.add_2_table(pos)
-#        
-#        print(2*"\n")
-#        
-#        print(6*"#" + " Ai " + 6*"#")
-#        card2 = np.array([])
-#       
-#        for _ in range(3):
-#            card = jogo.draw_card("player2")
-#            card2 = np.append(card2, card)
-#       
-#        print(player2.field)
-#        card_off = input(f"Jogador 2 saiu lhe as seguintes {card2} qual quer descartar?\n>>> ")
-#        
-#        while card_off not in card2:
-#            card_off = input(f"Carta inválida!! {card2} qual quer descartar?\n>>> ")
-#        player2.add_lixo(card_off)
-#        card2 = np.delete(card2, np.argwhere(card2 == card_off))
-#        for card in card2: 
-#            pos = input(f"Jogador 2 saiu lhe {card} onde quer por a carta?\n>>> ")
-#            player2.add_2_table(pos)
-#        
-#        print(2*"\n")
-#
-#    """
-#    print("O jogo acabou, e estes são as maos dos 2 jogadores")
-#    player1.top = np.array(["KS", "KC", "QS"])
-#    print("Player")
-#    print(player1.field)
-#    print("\nAI")
-#    print(player2.field)
-#    """
-#    print("Vamos calcular os pontos")
-#
-#    #print(jogo.get_score())
-#
-#
-#
-#if __name__ == "__main__":
-#    print("Projeto de PP")
-#    main()
