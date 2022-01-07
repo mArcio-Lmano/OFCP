@@ -14,4 +14,4 @@ Regras de Pineapple Open Face Chinese Poker:
    * Para além destes pontos atribuídos pelas linhas vencedoras, os jogadores também podem receber pontos através das **royalties**, estas dizem respeito a algumas das combinações que podem ser feitas com cartas da mesma linha.
 
 
-Nota: Ao contrário do jogo original, nesta versão não existe **Fantasyland** nem **Shooting the moon**. 
+**Nota: Ao contrário do jogo original, nesta versão não existe **Fantasyland** nem **Shooting the moon**.**
