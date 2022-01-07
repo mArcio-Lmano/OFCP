@@ -1,4 +1,4 @@
-# Pineapple Open Face Chinese Poker
+# Smart Pineapple Open Face Chinese Poker
 
 Repositório destinado ao projeto de fim de UC da UC de **programação probabilistica**
 
