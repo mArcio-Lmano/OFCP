@@ -2,6 +2,7 @@ import numpy as np
 
 class Player:
     def __init__(self, name):
+        self.points = 0
         self.hand = np.array([]) # Todas as cartas que o jogador possui
         self.lixo = np.array([]) # Cartas descartadas pelo jogador
         self.top = np.array([]) # 3 cartas
@@ -65,5 +66,14 @@ class Player:
         
         return "Carta Descartado"
 
-#    def add_2_table_AI(self):
-#        pass
+    def update_points(self, pontos):
+        self.points += pontos
+
+    def reset(self):
+        self.hand = np.array([]) # Todas as cartas que o jogador possui
+        self.lixo = np.array([]) # Cartas descartadas pelo jogador
+        self.top = np.array([]) # 3 cartas
+        self.mid = np.array([]) # 5 cartas
+        self.bot = np.array([]) # 5 cartas
+        self.field = self.refresh_field() # Jogo do player
+        self.n_cards_table = 0 # nº de cartas na mesa
